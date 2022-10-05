@@ -1,86 +1,66 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import postsService from "./postsService"
+import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios"
+
+const POSTS_URL = "http://localhost:5000/api/v1/postss"
 
 const initialState = {
-    posts: null,
-    isError: false,
-    isLoading: false,
-    isSuccess: false,
-    message: ""
+    posts: [],
+    status: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed' 
+    error: null
 }
 
-
-export const getPosts = createAsyncThunk("posts/get", async (thunkAPI) => {
-    try {
-        return await postsService.getPosts()
-    } catch (error) {
-        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-        return thunkAPI.rejectWithValue(message)
-    }
+export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
+        const response = await axios.get(POSTS_URL)
+        return response.data
 })
 
-export const createPost = createAsyncThunk("posts/create", async (postData, thunkAPI) => {
-    try {
-        return await postsService.createPost(postData)
-    } catch (error) {
-        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-        return thunkAPI.rejectWithValue(message)
-    }
-})
-
-    
-
-export const postsSlice = createSlice({
+const postsSlice = createSlice({
     name: "posts",
     initialState,
     reducers: {
-        reset: (state) => {
-            state.isLoading = false
-            state.isError = false
-            state.isSuccess = false
-            state.message = ''
-        }
+        postAdded: {
+            reducer: (state, action) => {
+                state.posts.push(action.payload)
+            },
+            prepare: (value) => {
+                return {
+                    payload: {
+                        ...value,
+                        id: nanoid(),
+                        date: new Date(),
+                        reactions: {
+                            thumbsUp: 0,
+                            wow: 0,
+                            heart: 0,
+                            rocket: 0,
+                            coffee: 0,
+                        }
+                    }
+                }
+            }
+        },
     },
-    extraReducers: (builder) => {
+    extraReducers(builder){
         builder
-            .addCase(getPosts.pending, (state) => {
-                state.isLoading = true
+            .addCase(fetchPosts.pending, (state, action) => {
+                state.status = "loading"
             })
-            .addCase(getPosts.fulfilled, (state, action) => {
-                state.isError = false
-                state.isLoading = false
-                state.isSuccess = true
+            .addCase(fetchPosts.fulfilled, (state, action) => {
+                state.status = "succeeded"
                 state.posts = action.payload
-                
             })
-            .addCase(getPosts.rejected, (state, action) =>{
-                state.isLoading = false
-                state.isError = true
-                state.message = action.payload
-                state.posts = null
-            })
-
-
-
-            .addCase(createPost.pending, (state) => {
-                state.isSuccess = false
-                state.isLoading = true
-                state.isError = false
-            })
-            .addCase(createPost.fulfilled, (state, action) => {
-                state.isSuccess = true
-                state.isLoading = false
-                state.isError = false
-                
-            })
-            .addCase(createPost.rejected, (state, action) =>{
-                state.isSuccess = false
-                state.isLoading = false
-                state.isError = true
-                state.message = action.payload
+            .addCase(fetchPosts.rejected, (state, action) => {
+                state.status = "failed"
+                state.error = action.error.message
             })
     }
 })
 
-export const { reset } = postsSlice.actions
+export const selectAllPosts = (state) => state.posts.posts
+export const selectStatus = (state) => state.posts.status
+export const selectError = (state) => state.posts.error
+
+
+export const { postAdded,  } = postsSlice.actions
+
 export default postsSlice.reducer
