@@ -19,8 +19,22 @@ export const createPost = async (req, res) => {
         creator,
         tags,
         selectedFile
-    })
-    .then(newPost => res.status(201).json(newPost))
-    .catch(err => res.status(409).json({err: err.message}))
+        })
+        .catch(err => res.status(409).json({err: err.message}))
     
+    await postModel.find()
+        .then(posts => res.status(201).json(posts))
+        .catch(err => res.status(404).json({err: err.message}))
+}
+
+export const deletePost = async (req, res) => {
+    const id = req.params.id
+    if(!id) return res.status(400).json({err: "Missing id"})
+
+    await postModel.findByIdAndDelete(id)
+        .catch(err => res.status(404).json({err: err.message}))
+    
+    await postModel.find()
+        .then(posts => res.status(201).json(posts))
+        .catch(err => res.status(404).json({err: err.message}))
 }

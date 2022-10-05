@@ -1,7 +1,7 @@
-import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios"
 
-const POSTS_URL = "http://localhost:5000/api/v1/postss"
+const POSTS_URL = "http://localhost:5000/api/v1/posts"
 
 const initialState = {
     posts: [],
@@ -14,31 +14,19 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
         return response.data
 })
 
+export const sendPost = createAsyncThunk("posts/sendPost", async (payload) => {
+    const response = await axios.post(POSTS_URL, payload)
+    return response.data
+})
+
 const postsSlice = createSlice({
     name: "posts",
     initialState,
     reducers: {
-        postAdded: {
-            reducer: (state, action) => {
-                state.posts.push(action.payload)
-            },
-            prepare: (value) => {
-                return {
-                    payload: {
-                        ...value,
-                        id: nanoid(),
-                        date: new Date(),
-                        reactions: {
-                            thumbsUp: 0,
-                            wow: 0,
-                            heart: 0,
-                            rocket: 0,
-                            coffee: 0,
-                        }
-                    }
-                }
-            }
-        },
+        reset: (state) => {
+            state.status = "idle"
+            state.error = null
+        }
     },
     extraReducers(builder){
         builder
@@ -53,6 +41,18 @@ const postsSlice = createSlice({
                 state.status = "failed"
                 state.error = action.error.message
             })
+
+            .addCase(sendPost.pending, (state, action) => {
+                state.status = "loading"
+            })
+            .addCase(sendPost.fulfilled, (state, action) => {
+                state.status = "succeeded"
+                state.posts = action.payload
+            })
+            .addCase(sendPost.rejected, (state, action) => {
+                state.status = "failed"
+                state.error = action.error.message
+            })
     }
 })
 
@@ -61,6 +61,6 @@ export const selectStatus = (state) => state.posts.status
 export const selectError = (state) => state.posts.error
 
 
-export const { postAdded,  } = postsSlice.actions
+export const { reset } = postsSlice.actions
 
 export default postsSlice.reducer

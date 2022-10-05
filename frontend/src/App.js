@@ -1,18 +1,25 @@
-import "./App.css"
-import AddPost from "./components/AddPost";
-// import Counter from "./components/Counter"
-import PostsList from "./components/PostsList";
-
-function App() {
+import {
+  Routes,
+  Route,
+} from "react-router-dom"
+import Home from "./pages/home/Home"
+import Login from "./pages/login/Login"
+import Register from "./pages/register/Register"
+import NotFound from "./pages/NotFound"
+import Header from "./components/header/Header"
+const App = () => {
 
   
 
   return (
     <>
-      <AddPost />
-      <h1>================================================</h1>
-      <PostsList />
-      {/* <Counter /> */}
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/login" element={<Login/>} />
+        <Route path="/register" element={<Register/>} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </>
   )
 }

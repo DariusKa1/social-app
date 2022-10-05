@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useSelector, useDispatch } from "react-redux"
-import { decrement, divideByAmount, increment, incrementByAmount, reset } from '../features/counter/counterSlice'
+import { decrement, divideByAmount, increment, incrementByAmount, reset } from './counterSlice'
 
 const Counter = () => {
     const dispatch = useDispatch()
