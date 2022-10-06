@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import PostCard from '../../components/postCard/PostCard'
-import { HomeMemories, HomePosts, HomeStyled } from './HomeStyled'
+import { HomeMemories, HomeForm, HomeStyled } from './HomeStyled'
 import { useSelector, useDispatch } from "react-redux"
 import { selectAllPosts, selectError, selectStatus, fetchPosts, reset  } from "../../features/posts/postsSlice"
-import AddPost from '../../features/posts/AddPost'
+import AddPost from '../../components/postCreateForm/PostCreateForm'
+import Spinner from '../../components/spinner/Spinner'
 
 const Home = () => {
   const dispatch = useDispatch()
@@ -20,21 +21,29 @@ const Home = () => {
     } 
   }, [postsStatus, dispatch, postsError])
 
-console.log(posts);
-
   const postsToShow = posts.map(post => (
     <PostCard key={post._id} data={post}/>
   ))
 
-  if(postsStatus === "loading") return <h1>LOADING...</h1>
   return (
     <HomeStyled>
       <HomeMemories>
-        {postsToShow}
+        
+        {
+          postsStatus === "loading" ?
+          (
+            <Spinner/>
+          ) :
+          (
+            <>
+              {postsToShow}
+            </>
+          )
+        }
       </HomeMemories>
-      <HomePosts>
+      <HomeForm>
         <AddPost />
-      </HomePosts>
+      </HomeForm>
     </HomeStyled>
   )
 }

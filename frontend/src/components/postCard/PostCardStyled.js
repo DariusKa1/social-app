@@ -12,20 +12,34 @@ export const PostCardStyled = styled.section`
     margin-bottom: 30px;
     margin-right: 30px;
     color: ${mainColor};
-    
+    transition: all ease-in-out 0.25s;
+
+    &:hover {
+       box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+       scale: 1.05;
+    }
+
+    @media (max-width: 880px){
+        width: 100%;
+        margin-right: 0px;
+    }
 `
 
 export const CardTop = styled.div`
     color: white;
     display: flex;
-    background-image: url(${props => props.img});
+    background: linear-gradient(0deg, rgba(209,129,39,0) 0%, rgba(0,0,0,1) 90%), url(${props => props.img });
     background-size: cover;
-    
     flex-direction: row;
     justify-content: space-between;
     width: inherit;
     height: 45%;
     background-color: aqua;
+
+    &:hover {
+        background: linear-gradient(0deg, rgba(209,129,39,0) 0%, rgba(0,0,0,1) 300%), url(${props => props.img });
+        background-size: cover;
+    }
 `
 
 export const TopNameDate = styled.div`

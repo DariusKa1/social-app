@@ -22,7 +22,7 @@ const PostCard = ({data}) => {
         
         <CardBot>
             <BotTags>
-                {tagsToShow}
+                {tagsToShow.length > 0 ? tagsToShow : "No Tags"}
             </BotTags>
             <h1>{title}</h1>
             <p>{message}</p>

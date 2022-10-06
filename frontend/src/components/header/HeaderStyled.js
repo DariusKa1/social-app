@@ -29,6 +29,11 @@ export const Page = styled(Link)`
     font-weight: bold;
     text-decoration: none;
     color: ${mainColor};
+    transition: all ease-in-out 0.25s;
+
+    &:hover {
+        color: white;
+    }
 `
 
 
