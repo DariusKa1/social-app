@@ -1,8 +1,12 @@
 import React from 'react'
+import LoginForm from '../../components/loginForm/LoginForm'
+import { LoginStyled } from './LoginStyled'
 
 const Login = () => {
   return (
-    <div>Login</div>
+    <LoginStyled>
+      <LoginForm />
+    </LoginStyled>
   )
 }
 

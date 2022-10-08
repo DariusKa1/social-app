@@ -1,5 +1,7 @@
 import styled from "styled-components"
 import { mainColor } from "../../globalStyles"
+import { AiFillDelete, AiFillLike } from "react-icons/ai"
+
 
 export const PostCardStyled = styled.section`
     display: flex;
@@ -104,8 +106,49 @@ export const BotActions = styled.div`
 
 export const LikeButton = styled.div`
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    transition: all ease-in-out 0.25s;
+
+
+    &:hover{
+        color: #4267B2;
+
+        & > *{
+            color: #4267B2;
+        }
+    }
 `
 
 export const DeleteButton = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
     cursor: pointer;
+    transition: all ease-in-out 0.25s;
+
+
+    &:hover{
+        color: red;
+
+        & > *{
+            color: red;
+        }
+    }
+
+`
+
+export const AiFillDeleteStyled = styled(AiFillDelete)`
+    color: black;
+    font-size: 20px;
+    transition: all ease-in-out 0.25s;
+`
+
+export const AiFillLikeStyled = styled(AiFillLike)`
+    color: black;
+    font-size: 20px;
+    transition: all ease-in-out 0.25s;
 `

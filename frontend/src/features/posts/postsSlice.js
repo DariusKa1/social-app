@@ -19,6 +19,11 @@ export const sendPost = createAsyncThunk("posts/sendPost", async (payload) => {
     return response.data
 })
 
+export const deletePost = createAsyncThunk("posts/deletePost", async (payload) => {
+    const response = await axios.delete(POSTS_URL + "/" + payload)
+    return response.data
+})
+
 const postsSlice = createSlice({
     name: "posts",
     initialState,
@@ -50,6 +55,18 @@ const postsSlice = createSlice({
                 state.posts = action.payload
             })
             .addCase(sendPost.rejected, (state, action) => {
+                state.status = "failed"
+                state.error = action.error.message
+            })
+
+            .addCase(deletePost.pending, (state, action) => {
+                state.status = "loading"
+            })
+            .addCase(deletePost.fulfilled, (state, action) => {
+                state.status = "succeeded"
+                state.posts = action.payload
+            })
+            .addCase(deletePost.rejected, (state, action) => {
                 state.status = "failed"
                 state.error = action.error.message
             })

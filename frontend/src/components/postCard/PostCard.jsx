@@ -1,9 +1,21 @@
 import React from 'react'
-import { BotActions, BotTags, CardBot, CardTop, DeleteButton, LikeButton, MoreInfo, PostCardStyled, TopNameDate } from './PostCardStyled'
+import { AiFillDeleteStyled, AiFillLikeStyled, BotActions, BotTags, CardBot, CardTop, DeleteButton, LikeButton, MoreInfo, PostCardStyled, TopNameDate } from './PostCardStyled'
 import { nanoid } from '@reduxjs/toolkit'
+import { useDispatch } from "react-redux"
+import { deletePost } from '../../features/posts/postsSlice'
 
 const PostCard = ({data}) => {
+    const dispatch = useDispatch()
     const {title, message, creator, tags, selectedFile, likeCount, createdAt} = data
+
+    const likeHandler = () => {
+        console.log(data._id);
+    }
+
+    const deleteHandler = () => {
+        dispatch(deletePost(data._id))
+    }
+
 
     const tagsToShow = tags.map(tag => (
         <h5 key={nanoid()}>#{tag}</h5>
@@ -27,11 +39,11 @@ const PostCard = ({data}) => {
             <h1>{title}</h1>
             <p>{message}</p>
             <BotActions>
-                <LikeButton>
-                    SPAN LIKE {likeCount}
+                <LikeButton onClick={likeHandler}>
+                    <AiFillLikeStyled /> LIKE {likeCount}
                 </LikeButton>
-                <DeleteButton>
-                    SPAN DELETE
+                <DeleteButton onClick={deleteHandler}>
+                    <AiFillDeleteStyled/> DELETE
                 </DeleteButton>
             </BotActions>
         </CardBot>
