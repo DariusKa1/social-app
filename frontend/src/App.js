@@ -7,9 +7,12 @@ import Login from "./pages/login/Login"
 import Register from "./pages/register/Register"
 import NotFound from "./pages/NotFound"
 import Header from "./components/header/Header"
-const App = () => {
+import { useDispatch } from "react-redux"
+import { fetchPosts } from "./features/posts/postsSlice"
 
-  
+const App = () => {
+  const dispatch = useDispatch()
+  dispatch(fetchPosts())
 
   return (
     <>

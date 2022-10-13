@@ -1,0 +1,25 @@
+{
+  "name": "social-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "fe": "npm run start --prefix frontend",
+    "be": "npm run start --prefix backend",
+    "dev": "concurrently \"npm run be\" \"npm run fe\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DariusKa1/social-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DariusKa1/social-app/issues"
+  },
+  "homepage": "https://github.com/DariusKa1/social-app#readme",
+  "dependencies": {
+    "concurrently": "^7.4.0"
+  }
+}
